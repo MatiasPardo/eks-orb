@@ -422,5 +422,30 @@ jobs:
             helm status << parameters.release-name-prefix >>-$(basename $file)
           done
         name: Check the release status
+  rollout-status:
+    description: perform the check of completion of the deployment in staging
+    executor: << parameters.executor >>
+    parameters:
+      environment:
+        description: declaration of environment, production or staging
+        type: string
+      name:
+        description: EKS cluster name
+        type: string
+      region:
+        description: AWS region where the eks cluster is located
+        type: string
+      service:
+        description: kubernetes deployment name
+          type: string
+      namespace:
+        description: kubernetes namespace name
+          type: string
+    steps:
+        - run:
+            command: aws eks update-kubeconfig --name  << parameter.environment >> --alias << parameter.name >>  --region << parameter.region >>
+        - run:
+            command: kubectl rollout status deployment << parameter.service >> -n << parameter.namespace >>
+
 version: 2.1
 
