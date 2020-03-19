@@ -1,0 +1,27 @@
+description:     perform the check of completion of the deployment in staging
+executor: << parameters.executor >>
+parameters:
+  executor:
+    default: default
+    description: Executor to use for this job
+    type: executor
+  environment:
+    description: declaration of environment, production or staging
+    type: string
+  cluster-name:
+    description: EKS cluster name
+    type: string
+  region:
+    description: AWS region where the eks clust er is located
+    type: string
+  service:
+    description: kubernetes deployment name
+    type: string
+  namespace:
+    description: kubernetes namespace name
+    type: string
+steps:
+  - update-kubeconfig-with-authenticator:
+      cluster-name: << parameters.cluster-name >>
+      aws-region: << parameters.region >>
+  - steps: << parameters.steps >>

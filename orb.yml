@@ -437,7 +437,7 @@ jobs:
         description: EKS cluster name
         type: string
       region:
-        description: AWS region where the eks cluster is located
+        description: AWS region where the eks clust er is located
         type: string
       service:
         description: kubernetes deployment name
@@ -446,10 +446,8 @@ jobs:
         description: kubernetes namespace name
         type: string
     steps:
-    - run:
-        command: aws eks update-kubeconfig --name  << parameter.environment >> --alias << parameter.cluster-name >>  --region << parameter.region >>
-    - run:
-        command: kubectl rollout status deployment << parameter.service >> -n << parameter.namespace >>
+    - run: aws eks update-kubeconfig --name  << parameter.environment >> --alias << parameter.cluster-name >>  --region << parameter.region >>
+    - run: kubectl rollout status deployment << parameter.service >> -n << parameter.namespace >>
 
 version: 2.1
 
