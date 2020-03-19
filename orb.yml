@@ -260,6 +260,22 @@ examples:
               region: aws-region
               release-name: release-name
               values-file: values.yaml
+  rollout-status:
+    description:     perform the check of completion of the deployment in staging
+    usage:
+      orbs:
+        eks: tiendanube/eks@1.1.0
+      version: 2.1
+      workflows:
+        rollout-status:
+          jobs:
+          - eks/rollout-status:
+              environment: environment-name
+              cluster-name: cluster-name
+              namespace: default
+              service: kubernetes-deploy-name
+              region: aws-region
+                                     
 executors:
   default:
     description: CircleCI convenience image for AWS EKS
