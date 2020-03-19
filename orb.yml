@@ -426,10 +426,14 @@ jobs:
     description: perform the check of completion of the deployment in staging
     executor: << parameters.executor >>
     parameters:
+      executor:
+        default: default
+        description: Executor to use for this job
+        type: executor
       environment:
         description: declaration of environment, production or staging
         type: string
-      name:
+      cluster-name:
         description: EKS cluster name
         type: string
       region:
@@ -437,15 +441,15 @@ jobs:
         type: string
       service:
         description: kubernetes deployment name
-          type: string
+        type: string
       namespace:
         description: kubernetes namespace name
-          type: string
+        type: string
     steps:
-        - run:
-            command: aws eks update-kubeconfig --name  << parameter.environment >> --alias << parameter.name >>  --region << parameter.region >>
-        - run:
-            command: kubectl rollout status deployment << parameter.service >> -n << parameter.namespace >>
+    - run:
+        command: aws eks update-kubeconfig --name  << parameter.environment >> --alias << parameter.cluster-name >>  --region << parameter.region >>
+    - run:
+        command: kubectl rollout status deployment << parameter.service >> -n << parameter.namespace >>
 
 version: 2.1
 
