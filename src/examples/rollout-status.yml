@@ -6,10 +6,9 @@ usage:
   workflows:
     rollout-status:
       jobs:
-      - eks/rollout-status:
+        - eks/rollout-status:
           environment: environment-name
           cluster-name: cluster-name
           namespace: default
           service: kubernetes-deploy-name
           region: aws-region
-  

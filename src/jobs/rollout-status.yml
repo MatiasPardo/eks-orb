@@ -1,12 +1,13 @@
-description:     perform the check of completion of the deployment in staging
+description: perform the check of completion of the deployment in staging
 executor: << parameters.executor >>
 parameters:
   executor:
     default: default
     description: Executor to use for this job
     type: executor
-  environment:
-    description: declaration of environment, production or staging
+  type-name:
+    default: deployment
+    description: declaration of k8s resource - deployment, statefulset etc
     type: string
   cluster-name:
     description: EKS cluster name
@@ -24,4 +25,6 @@ steps:
   - update-kubeconfig-with-authenticator:
       cluster-name: << parameters.cluster-name >>
       aws-region: << parameters.region >>
-  - steps: << parameters.steps >>
+  - run:
+      name: Rollout Status
+      command: kubectl -n << parameters.namespace >> rollout status << parameters.type-name >> << parameters.service >>
