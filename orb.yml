@@ -275,7 +275,7 @@ examples:
               namespace: default
               service: kubernetes-deploy-name
               region: aws-region
-                                     
+
 executors:
   default:
     description: CircleCI convenience image for AWS EKS
@@ -462,8 +462,10 @@ jobs:
         description: kubernetes namespace name
         type: string
     steps:
-    - run: aws eks update-kubeconfig --name  << parameter.environment >> --alias << parameter.cluster-name >>  --region << parameter.region >>
-    - run: kubectl rollout status deployment << parameter.service >> -n << parameter.namespace >>
+    - run: 
+        command: aws eks update-kubeconfig --name  << parameter.environment >> --alias << parameter.cluster-name >>  --region << parameter.region >>
+    - run: 
+        command: kubectl rollout status deployment << parameter.service >> -n << parameter.namespace >>
 
 version: 2.1
 
