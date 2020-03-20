@@ -7,8 +7,8 @@ usage:
     rollout-status:
       jobs:
         - eks/rollout-status:
-          environment: environment-name
-          cluster-name: cluster-name
-          namespace: default
-          service: kubernetes-deploy-name
-          region: aws-region
+            type-name: kubernetes-resource-name
+            cluster-name: cluster-name
+            namespace: default
+            service: kubernetes-deploy-name
+            region: aws-region
