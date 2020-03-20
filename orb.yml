@@ -271,10 +271,10 @@ examples:
           jobs:
           - eks/rollout-status:
               cluster-name: cluster-name
-              environment: environment-name
               namespace: default
               region: aws-region
               service: kubernetes-deploy-name
+              type-name: kubernetes-resource-name
 executors:
   default:
     description: CircleCI convenience image for AWS EKS
@@ -437,6 +437,7 @@ jobs:
             helm status << parameters.release-name-prefix >>-$(basename $file)
           done
         name: Check the release status
+  orb: {}
   rollout-status:
     description: perform the check of completion of the deployment in staging
     executor: << parameters.executor >>
@@ -459,8 +460,7 @@ jobs:
         type: string
       type-name:
         default: deployment
-        description: declaration of kubernetes resource, ex.. deployment, statefulset
-          etc
+        description: declaration of k8s resource - deployment, statefulset etc
         type: string
     steps:
     - update-kubeconfig-with-authenticator:
