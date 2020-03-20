@@ -261,7 +261,7 @@ examples:
               release-name: release-name
               values-file: values.yaml
   rollout-status:
-    description:     perform the check of completion of the deployment in staging
+    description: perform the check of completion of the deployment in staging
     usage:
       orbs:
         eks: tiendanube/eks@1.1.0
@@ -270,12 +270,11 @@ examples:
         rollout-status:
           jobs:
           - eks/rollout-status:
-              environment: environment-name
               cluster-name: cluster-name
+              environment: environment-name
               namespace: default
-              service: kubernetes-deploy-name
               region: aws-region
-
+              service: kubernetes-deploy-name
 executors:
   default:
     description: CircleCI convenience image for AWS EKS
@@ -442,15 +441,15 @@ jobs:
     description: perform the check of completion of the deployment in staging
     executor: << parameters.executor >>
     parameters:
+      cluster-name:
+        description: EKS cluster name
+        type: string
       executor:
         default: default
         description: Executor to use for this job
         type: executor
-      environment:
-        description: declaration of environment, production or staging
-        type: string
-      cluster-name:
-        description: EKS cluster name
+      namespace:
+        description: kubernetes namespace name
         type: string
       region:
         description: AWS region where the eks clust er is located
@@ -458,14 +457,18 @@ jobs:
       service:
         description: kubernetes deployment name
         type: string
-      namespace:
-        description: kubernetes namespace name
+      type-name:
+        default: deployment
+        description: declaration of kubernetes resource, ex.. deployment, statefulset
+          etc
         type: string
     steps:
-    - run: 
-        command: aws eks update-kubeconfig --name  << parameter.environment >> --alias << parameter.cluster-name >>  --region << parameter.region >>
-    - run: 
-        command: kubectl rollout status deployment << parameter.service >> -n << parameter.namespace >>
-
+    - update-kubeconfig-with-authenticator:
+        aws-region: << parameters.region >>
+        cluster-name: << parameters.cluster-name >>
+    - run:
+        command: kubectl -n << parameters.namespace >> rollout status << parameters.type-name
+          >> << parameters.service >>
+        name: Rollout Status
 version: 2.1
 
