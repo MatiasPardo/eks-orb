@@ -437,11 +437,15 @@ jobs:
             helm status << parameters.release-name-prefix >>-$(basename $file)
           done
         name: Check the release status
-  orb: {}
   rollout-status:
     description: perform the check of completion of the deployment in staging
     executor: << parameters.executor >>
     parameters:
+      checkout:
+        default: true
+        description: Boolean for whether or not to checkout as a first step. Default
+          is true.
+        type: boolean
       cluster-name:
         description: EKS cluster name
         type: string
@@ -463,6 +467,10 @@ jobs:
         description: declaration of k8s resource - deployment, statefulset etc
         type: string
     steps:
+    - when:
+        condition: << parameters.checkout >>
+        steps:
+        - checkout
     - update-kubeconfig-with-authenticator:
         aws-region: << parameters.region >>
         cluster-name: << parameters.cluster-name >>
