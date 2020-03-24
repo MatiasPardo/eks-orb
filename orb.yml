@@ -259,6 +259,7 @@ examples:
               namespace: default
               region: aws-region
               release-name: release-name
+              rolllout-status: bolean value, enable kubernetes rollout status
               type-name: kubernetes-resource-name
               values-file: values.yaml
   rollout-status:
@@ -312,10 +313,6 @@ jobs:
       chart:
         description: Chart that will be installed
         type: string
-      check-status:
-        default: true
-        description: to validate whether or not you want to checkout the deployment
-        type: boolean
       checkout:
         default: true
         description: Boolean for whether or not to checkout as a first step. Default
@@ -341,6 +338,10 @@ jobs:
       release-name:
         description: Helm release name
         type: string
+      rollout-status:
+        default: true
+        description: to validate whether or not you want to checkout the deployment
+        type: boolean
       s3-chart-repo:
         default: null
         description: Additional helm chart repository
@@ -375,13 +376,13 @@ jobs:
           sleep 10
           helm status << parameters.release-name >>
         name: Check the release status
-    - condition: << parameter.check-status >>
-      steps: null
-      when: null
-    - command: kubectl -n << parameters.namespace >> rollout status << parameters.type-name
-        >> << parameters.release-name >>
-      name: check deployment status
-      run: null
+    - when:
+        condition: << parameter.rollout-status >>
+        steps: null
+    - run:
+        command: kubectl -n << parameters.namespace >> rollout status << parameters.type-name
+          >> << parameters.release-name >>
+        name: check deployment status
   helm-deploy-multi:
     description: Deploy the given Helm chart to EKS Cluster multiple times
     executor: << parameters.executor >>

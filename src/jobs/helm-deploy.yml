@@ -37,7 +37,7 @@ parameters:
     default: deployment
     description: declaration of k8s resource - deployment, statefulset etc
     type: string
-  check-status:
+  rollout-status:
     type: boolean
     description: to validate whether or not you want to checkout the deployment
     default: true
@@ -73,8 +73,8 @@ steps:
         sleep 10
         helm status << parameters.release-name >>
   - when:
-    condition: << parameter.check-status >>
-    steps:
+      condition: << parameter.rollout-status >>
+      steps:
   - run:
-    name: check deployment status
-    command: kubectl -n << parameters.namespace >> rollout status << parameters.type-name >> << parameters.release-name >>      
+      name: check deployment status
+      command: kubectl -n << parameters.namespace >> rollout status << parameters.type-name >> << parameters.release-name >>      

@@ -16,3 +16,4 @@ usage:
             chart-version: latest
             image-tag: ${CIRCLE_SHA1:0:7}
             type-name: kubernetes-resource-name
+            rolllout-status: bolean value, enable kubernetes rollout status
