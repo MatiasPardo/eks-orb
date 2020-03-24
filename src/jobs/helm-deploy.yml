@@ -73,7 +73,7 @@ steps:
         sleep 10
         helm status << parameters.release-name >>
   - when:
-      condition: << parameter.rollout-status >>
+      condition: << parameters.rollout-status >>
       steps:
   - run:
       name: check deployment status

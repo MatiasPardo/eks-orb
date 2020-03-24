@@ -377,7 +377,7 @@ jobs:
           helm status << parameters.release-name >>
         name: Check the release status
     - when:
-        condition: << parameter.rollout-status >>
+        condition: << parameters.rollout-status >>
         steps: null
     - run:
         command: kubectl -n << parameters.namespace >> rollout status << parameters.type-name
