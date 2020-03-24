@@ -15,7 +15,7 @@ parameters:
   region:
     description: AWS region where the eks clust er is located
     type: string
-  service:
+  release-name:
     description: kubernetes deployment name
     type: string
   namespace:
@@ -35,4 +35,4 @@ steps:
       aws-region: << parameters.region >>
   - run:
       name: Rollout Status
-      command: kubectl -n << parameters.namespace >> rollout status << parameters.type-name >> << parameters.service >>
+      command: kubectl -n << parameters.namespace >> rollout status << parameters.type-name >> << parameters.release-name >>

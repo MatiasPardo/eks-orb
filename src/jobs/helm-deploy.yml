@@ -33,6 +33,14 @@ parameters:
     type: string
     description: Which image tag will be installed
     default: ${CIRCLE_SHA1:0:7}
+  type-name:
+    default: deployment
+    description: declaration of k8s resource - deployment, statefulset etc
+    type: string
+  check-status:
+    type: boolean
+    description: to validate whether or not you want to checkout the deployment
+    default: true
   checkout:
     type: boolean
     description: Boolean for whether or not to checkout as a first step. Default is true.
@@ -64,3 +72,9 @@ steps:
       command: |
         sleep 10
         helm status << parameters.release-name >>
+  - when:
+    condition: << parameter.check-status >>
+    steps:
+  - run:
+    name: check deployment status
+    command: kubectl -n << parameters.namespace >> rollout status << parameters.type-name >> << parameters.release-name >>      

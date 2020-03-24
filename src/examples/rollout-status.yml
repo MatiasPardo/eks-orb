@@ -10,5 +10,5 @@ usage:
             type-name: kubernetes-resource-name
             cluster-name: cluster-name
             namespace: default
-            service: kubernetes-deploy-name
+            release-name: kubernetes-deploy-name
             region: aws-region
