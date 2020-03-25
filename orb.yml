@@ -262,21 +262,6 @@ examples:
               rolllout-status: bolean value, enable kubernetes rollout status
               type-name: kubernetes-resource-name
               values-file: values.yaml
-  rollout-status:
-    description: perform the check of completion of the deployment in staging
-    usage:
-      orbs:
-        eks: tiendanube/eks@1.1.0
-      version: 2.1
-      workflows:
-        rollout-status:
-          jobs:
-          - eks/rollout-status:
-              cluster-name: cluster-name
-              namespace: default
-              region: aws-region
-              release-name: kubernetes-deploy-name
-              type-name: kubernetes-resource-name
 executors:
   default:
     description: CircleCI convenience image for AWS EKS
@@ -454,46 +439,5 @@ jobs:
             helm status << parameters.release-name-prefix >>-$(basename $file)
           done
         name: Check the release status
-  rollout-status:
-    description: perform the check of completion of the deployment in staging
-    executor: << parameters.executor >>
-    parameters:
-      checkout:
-        default: true
-        description: Boolean for whether or not to checkout as a first step. Default
-          is true.
-        type: boolean
-      cluster-name:
-        description: EKS cluster name
-        type: string
-      executor:
-        default: default
-        description: Executor to use for this job
-        type: executor
-      namespace:
-        description: kubernetes namespace name
-        type: string
-      region:
-        description: AWS region where the eks clust er is located
-        type: string
-      release-name:
-        description: kubernetes deployment name
-        type: string
-      type-name:
-        default: deployment
-        description: declaration of k8s resource - deployment, statefulset etc
-        type: string
-    steps:
-    - when:
-        condition: << parameters.checkout >>
-        steps:
-        - checkout
-    - update-kubeconfig-with-authenticator:
-        aws-region: << parameters.region >>
-        cluster-name: << parameters.cluster-name >>
-    - run:
-        command: kubectl -n << parameters.namespace >> rollout status << parameters.type-name
-          >> << parameters.release-name >>
-        name: Rollout Status
 version: 2.1
 
